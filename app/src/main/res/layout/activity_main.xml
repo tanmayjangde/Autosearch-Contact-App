@@ -24,6 +24,7 @@
                 android:layout_weight="5"
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbarEt"
+                android:inputType="text"
                 android:hint="Search"/>
 
             <ImageButton

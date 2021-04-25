@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_contact_info.*
+import java.util.Collections.replaceAll
 
 class ContactInfo : AppCompatActivity() {
 
     lateinit var viewModel: ContactViewModel
+
     var trie = Trie.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,7 @@ class ContactInfo : AppCompatActivity() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(ContactViewModel::class.java)
 
         addContactInfo.setOnClickListener{
-            val contactNameText = contactNameEt.text.toString()
+            val contactNameText = contactNameEt.text.toString().toLowerCase().replace("\\s", "")
             val contactNumberText = contactNumberEt.text.toString()
             if(contactNameText.isNotEmpty() && contactNumberText.isNotEmpty()){
                 viewModel.insert(Contact(contactNameText,contactNumberText))

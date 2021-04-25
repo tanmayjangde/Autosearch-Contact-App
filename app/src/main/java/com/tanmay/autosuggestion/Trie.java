@@ -49,7 +49,7 @@ public class Trie {
                 pCrawl.children[index] = getNode();
             pCrawl = pCrawl.children[index];
         }
-        // mark last node as leaf
+
         pCrawl.isWordEnd = true;
         pCrawl.number=pNumber;
     }
@@ -60,53 +60,35 @@ public class Trie {
         {
             if(currentNode.children[level]!=null)
                 return false;
-
         }
-
         return true;
     }
 
     static boolean removeUtil(TrieNode currentNode,String key,
-                              int level,int length)
-    {
-        // If trie is empty
+                              int level,int length) {
         if(currentNode==null)
             return false;
 
+        if(level==length) {
 
-        // If last character of key is being processed
-        if(level==length)
-        {
-
-            // This node is no more end of word after
-            // removal of given key
             currentNode.isWordEnd=false;
 
-            // If given is not prefix of any other word
-            if(hasNoChild(currentNode))
-            {
+            if(hasNoChild(currentNode)) {
                 return true;
             }
-            else
-            {
+            else {
                 return false;
             }
         }
         else{
-
-            // If not last character, recur for the child
-            // obtained using ASCII value
             TrieNode childNode =
                     currentNode.children[key.charAt(level)-'a'];
 
             boolean childDeleted =
                     removeUtil(childNode,key,level+1,length);
 
-            if(childDeleted)
-            {
-                // If root does not have any child
-                //(its only child got
-                // deleted), and it is not end of another word.
+            if(childDeleted) {
+
                 return (currentNode.isWordEnd
                         &&hasNoChild(currentNode));
             }
@@ -114,91 +96,61 @@ public class Trie {
         return false;
     }
 
-    void remove(String key)
-    {
+    void remove(String key) {
         int length=key.length();
-        if(length>0)
-        {
+        if(length>0) {
             removeUtil(root,key,0,length);
         }
     }
 
-    static boolean isLastNode(TrieNode root)
-    {
+    static boolean isLastNode(TrieNode root) {
         for (int i = 0; i < ALPHABET_SIZE; i++)
             if (root.children[i] != null)
                 return false;
         return true;
     }
 
-    static ArrayList<Contact> suggestionsRec(TrieNode root, String currPrefix,ArrayList<Contact> suggestion)
-    {
-        // found a string in Trie with the given prefix
-        if (root.isWordEnd)
-        {
+    static ArrayList<Contact> suggestionsRec(TrieNode root, String currPrefix,ArrayList<Contact> suggestion) {
+        if (root.isWordEnd) {
             suggestion.add(new Contact(currPrefix,root.number));
         }
-
-        // All children struct node pointers are NULL
         if (isLastNode(root))
             return suggestion;
 
-        for (int i = 0; i < ALPHABET_SIZE; i++)
-        {
-            if (root.children[i] != null)
-            {
-                // append current character to currPrefix string
+        for (int i = 0; i < ALPHABET_SIZE; i++) {
+            if (root.children[i] != null) {
                 currPrefix += (char)(97 + i);
-
-                // recur over the rest
                 suggestionsRec(root.children[i], currPrefix,suggestion);
+                currPrefix = currPrefix.substring(0, currPrefix.length() - 1);
             }
         }
         return suggestion;
     }
 
     static ArrayList<Contact> AutoSuggestions(TrieNode root,
-                                              final String query,ArrayList<Contact> suggestion)
-    {
+                                              final String query,ArrayList<Contact> suggestion) {
         TrieNode pCrawl = root;
 
-        // Check if prefix is present and find the
-        // the node (of last level) with last character
-        // of given string.
         int level;
         int n = query.length();
 
-        for (level = 0; level < n; level++)
-        {
+        for (level = 0; level < n; level++) {
             int index = (query.charAt(level) - 'a');
 
-            // no string in the Trie has this prefix
             if (pCrawl.children[index] == null)
                 return suggestion;
 
             pCrawl = pCrawl.children[index];
         }
-
-        // If prefix is present as a word.
         boolean isWord = (pCrawl.isWordEnd == true);
-
-        // If prefix is last node of tree (has no
-        // children)
         boolean isLast = isLastNode(pCrawl);
 
-        // If prefix is present as a word, but
-        // there is no subtree below the last
-        // matching node.
-        if (isWord && isLast)
-        {
+        if (isWord && isLast) {
             suggestion.add(new Contact(query, pCrawl.number));
             return suggestion;
         }
 
-        // If there are are nodes below last
-        // matching character.
-        if (!isLast)
-        {
+        if (!isLast) {
             String prefix = query;
             suggestionsRec(pCrawl, prefix,suggestion);
             return suggestion;
@@ -208,7 +160,7 @@ public class Trie {
 
     public ArrayList<Contact> getAutosuggestion(String prefix){
         ArrayList<Contact> suggestion = new ArrayList<>();
-        suggestion=AutoSuggestions(root,prefix,suggestion);
+        suggestion = AutoSuggestions(root,prefix,suggestion);
         return suggestion;
     }
 }

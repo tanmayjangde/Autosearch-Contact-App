@@ -24,7 +24,7 @@ abstract class ContactDatabase:RoomDatabase() {
                     context.applicationContext,
                     ContactDatabase::class.java,
                     "Contact_Database"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 // return instance
                 instance

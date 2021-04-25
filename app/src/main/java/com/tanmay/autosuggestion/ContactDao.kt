@@ -19,5 +19,5 @@ interface ContactDao {
     fun getAllContacts(): LiveData<List<Contact>>
 
     @Query("Select * from Contact_Table order by contactName ASC")
-    suspend fun getInitialContacts():List<Contact>
+    fun getInitialContacts():List<Contact>
 }

@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(),IContactsRVAdapter{
 
@@ -80,11 +80,9 @@ class MainActivity : AppCompatActivity(),IContactsRVAdapter{
     }
 
     private fun addAllContactsToTrie(contactList:List<Contact>) {
-
-        val contactsIterator = contactList.iterator()
-        while (contactsIterator.hasNext()) {
-           trie.insert(contactsIterator.next().contactName,contactsIterator.next().contactNumber)
-        }
+            contactList.forEach(){
+                trie.insert(it.contactName, it.contactNumber)
+            }
     }
 
     override fun onItemClicked(contact: Contact) {

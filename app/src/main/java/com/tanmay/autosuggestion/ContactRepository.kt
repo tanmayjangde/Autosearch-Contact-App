@@ -16,7 +16,7 @@ class ContactRepository(private val contactDao: ContactDao) {
         contactDao.delete(contact)
     }
 
-    suspend fun getInitialContacts():List<Contact> {
+    fun getInitialContacts():List<Contact> {
             return contactDao.getInitialContacts()
     }
 }

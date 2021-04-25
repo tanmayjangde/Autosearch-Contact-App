@@ -26,11 +26,6 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getInitialContacts():List<Contact>{
-
-        var contactList:List<Contact> = emptyList()
-        viewModelScope.launch(Dispatchers.IO) {
-            contactList=repository.getInitialContacts()
-        }
-        return contactList
+        return repository.getInitialContacts()
     }
 }
