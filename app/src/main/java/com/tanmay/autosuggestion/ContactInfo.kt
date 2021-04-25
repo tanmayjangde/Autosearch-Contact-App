@@ -21,7 +21,7 @@ class ContactInfo : AppCompatActivity() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(ContactViewModel::class.java)
 
         addContactInfo.setOnClickListener{
-            val contactNameText = contactNameEt.text.toString().toLowerCase().replace("\\s", "")
+            val contactNameText = contactNameEt.text.toString().toLowerCase().replace("\\s".toRegex(), "")
             val contactNumberText = contactNumberEt.text.toString()
             if(contactNameText.isNotEmpty() && contactNumberText.isNotEmpty()){
                 viewModel.insert(Contact(contactNameText,contactNumberText))
